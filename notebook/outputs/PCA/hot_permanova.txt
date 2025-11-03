@@ -1,0 +1,12 @@
+PERMANOVA Result: Hot infuses (PC space)
+======================================================================
+Permutations: 999
+
+method name                PERMANOVA
+test statistic name         pseudo-F
+sample size                       15
+number of groups                   5
+test statistic            242.201756
+p-value                        0.001
+number of permutations           999
+Name: PERMANOVA results, dtype: object

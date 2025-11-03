@@ -1,0 +1,5 @@
+#input/output file paths
+io: 
+  metadata: data/gcms/volatile_infuses_metadata.tsv
+  ftable: data/gcms/feature_table.csv
+  sensory_table: data/gcms/PanelData_infuses.csv
