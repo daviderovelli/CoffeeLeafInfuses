@@ -16,7 +16,7 @@ git clone https://github.com/daviderovelli/CoffeeLeafInfuses
 2. Create a new conda environment and install the required packages and dependencies from `requirements.yaml` by running:
 ~~~
 conda env create -f requirements.yaml
-conda activate coffeeleafinfuses
+conda activate CoffeeLeafInfuses
 ~~~
 Alternatively, if you are using macOS or Linux, you can run the setup script instead:
 ~~~
@@ -25,7 +25,7 @@ source activate.sh
 This script checks if the environment already exists, creates it if needed, installs dependencies, and exports the repository path to `PYTHONPATH`. 
 
 ## Repository structure
-- The `cfg` folder contains `yaml` configuration files. File names and paths are listed in `config.yaml`. **Edit this file directly to change file names and paths.**
+- The `cfg` folder contains `yaml` configuration files. File names and paths are listed in `config.yaml`. Edit this file directly to change file names and paths.
 - The `data` folder contains [...] subfolders: 
     - [complete]   
 - The `scripts` and `notebooks` folders contain Python scripts and Jupyter Notebooks to reproduce and run the data analysis (see [Usage](#usage)).
@@ -35,15 +35,16 @@ This script checks if the environment already exists, creates it if needed, inst
 The `paneldata_infuses_full.csv` contains the data collected during the sensory assesment of the samples under the analysis. The `feature_table.csv` contains all the annotations retrived in the study using a HS-SPME-GC-MS paltform (the method is described in the original publication).
 
 Scripts: 
-- `00_query_classification.py`: query PubChem to collect the SMILES for each annotation using the InChiKey values. Using this information, NPClassfier was used to retrive the chemical classes for each comopounds. Results are combined into the original `feature_table.csv` file.
-- `01_data_preprocessing.py`: using the `feature_table.csv`
+- `00_query_classification.py`: query []
 
-This script prepares GC–MS feature data for downstream multivariate analysis. It loads a features CSV and sample metadata TSV, ensures samples match, splits the dataset into hot vs cold extraction groups, imputes missing values (fills NaN with 0), filters out rare features (by prevalence), standardizes (autoscale) each metabolite across samples, and writes autoscaled hot/cold tables to outputs/
+- `01_data_preprocessing.py`:
 
 
 Notebooks: 
-- `01_sensory.ipynb`: 
+- `01_sensory.ipynb`: query Wikidata for natural product reports associated with each genus in the Angiosperms tree of life. The list of genera is extracted from the phylogenetic tree and each genus is indidually queried using a SPARQL query template. Results are combined into a unique CSV table `nps_in_genera.csv`.
 
 - `02_volatilome_stats.ipynb`:
+
+- `03_Integration_volatile_sensory.ipynb`: 
 
 ## I/O files
