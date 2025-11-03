@@ -16,7 +16,7 @@ git clone https://github.com/daviderovelli/CoffeeLeafInfuses
 2. Create a new conda environment and install the required packages and dependencies from `requirements.yaml` by running:
 ~~~
 conda env create -f requirements.yaml
-conda activate CoffeeLeafInfuses
+conda activate coffeeleafinfuses
 ~~~
 Alternatively, if you are using macOS or Linux, you can run the setup script instead:
 ~~~
