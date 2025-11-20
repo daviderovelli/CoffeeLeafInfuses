@@ -1,138 +1,16 @@
-data/gcms/rawdata/080125_LRI.raw
-data/gcms/rawdata/150125_bianco_fibra.raw
-data/gcms/rawdata/150125_bianco_fibra2.raw
-data/gcms/rawdata/150125_bianco_fibra3.raw
-data/gcms/rawdata/150125_bianco_fibra4.raw
-data/gcms/rawdata/150125_MIX_ALCANI_D.raw
-data/gcms/rawdata/Quantificazione_ONGOING_Long.XLS
-data/gcms/rawdata/Cold/150125_F_MA_1_NS.raw
-data/gcms/rawdata/Cold/150125_F_MA_1_S.raw
-data/gcms/rawdata/Cold/150125_F_MA_2_NS.raw
-data/gcms/rawdata/Cold/150125_F_MA_2_S.raw
-data/gcms/rawdata/Cold/150125_F_MA_3_NS.raw
-data/gcms/rawdata/Cold/150125_F_MA_3_S.raw
-data/gcms/rawdata/Cold/150125_F_MEC_1_NS.raw
-data/gcms/rawdata/Cold/150125_F_MEC_1_S.raw
-data/gcms/rawdata/Cold/150125_F_MEC_2_NS.raw
-data/gcms/rawdata/Cold/150125_F_MEC_2_S.raw
-data/gcms/rawdata/Cold/150125_F_MEC_3_NS.raw
-data/gcms/rawdata/Cold/150125_F_MEC_3_S.raw
-data/gcms/rawdata/Cold/150125_F_MT5_1_NS.raw
-data/gcms/rawdata/Cold/150125_F_MT5_1_S.raw
-data/gcms/rawdata/Cold/150125_F_MT5_2_NS.raw
-data/gcms/rawdata/Cold/150125_F_MT5_2_S.raw
-data/gcms/rawdata/Cold/150125_F_MT5_3_NS.raw
-data/gcms/rawdata/Cold/150125_F_MT5_3_S.raw
-data/gcms/rawdata/Cold/150125_F_NGE_1_NS.raw
-data/gcms/rawdata/Cold/150125_F_NGE_1_S.raw
-data/gcms/rawdata/Cold/150125_F_NGE_2_NS.raw
-data/gcms/rawdata/Cold/150125_F_NGE_2_S.raw
-data/gcms/rawdata/Cold/150125_F_NGE_3_NS.raw
-data/gcms/rawdata/Cold/150125_F_NGE_3_S.raw
-data/gcms/rawdata/Cold/150125_F_WI_1_NS.raw
-data/gcms/rawdata/Cold/150125_F_WI_1_S.raw
-data/gcms/rawdata/Cold/150125_F_WI_2_NS.raw
-data/gcms/rawdata/Cold/150125_F_WI_2_S.raw
-data/gcms/rawdata/Cold/150125_F_WI_3_NS.raw
-data/gcms/rawdata/Cold/150125_F_WI_3_S.raw
-data/gcms/rawdata/Hot/150125_C_MA_1_NS.raw
-data/gcms/rawdata/Hot/150125_C_MA_1_S.raw
-data/gcms/rawdata/Hot/150125_C_MA_2_NS.raw
-data/gcms/rawdata/Hot/150125_C_MA_2_S.raw
-data/gcms/rawdata/Hot/150125_C_MA_3_NS.raw
-data/gcms/rawdata/Hot/150125_C_MA_3_S.raw
-data/gcms/rawdata/Hot/150125_C_MEC_1_NS.raw
-data/gcms/rawdata/Hot/150125_C_MEC_1_S.raw
-data/gcms/rawdata/Hot/150125_C_MEC_2_NS.raw
-data/gcms/rawdata/Hot/150125_C_MEC_2_S.raw
-data/gcms/rawdata/Hot/150125_C_MEC_3_NS.raw
-data/gcms/rawdata/Hot/150125_C_MEC_3_S.raw
-data/gcms/rawdata/Hot/150125_C_MT5_1_NS.raw
-data/gcms/rawdata/Hot/150125_C_MT5_1_S.raw
-data/gcms/rawdata/Hot/150125_C_MT5_2_NS.raw
-data/gcms/rawdata/Hot/150125_C_MT5_2_S.raw
-data/gcms/rawdata/Hot/150125_C_MT5_3_NS.raw
-data/gcms/rawdata/Hot/150125_C_MT5_3_S.raw
-data/gcms/rawdata/Hot/150125_C_NGE_1_NS.raw
-data/gcms/rawdata/Hot/150125_C_NGE_1_S.raw
-data/gcms/rawdata/Hot/150125_C_NGE_2_NS.raw
-data/gcms/rawdata/Hot/150125_C_NGE_2_S.raw
-data/gcms/rawdata/Hot/150125_C_NGE_3_NS.raw
-data/gcms/rawdata/Hot/150125_C_NGE_3_S.raw
-data/gcms/rawdata/Hot/150125_C_WI_1_NS.raw
-data/gcms/rawdata/Hot/150125_C_WI_1_S.raw
-data/gcms/rawdata/Hot/150125_C_WI_2_NS.raw
-data/gcms/rawdata/Hot/150125_C_WI_2_S.raw
-data/gcms/rawdata/Hot/150125_C_WI_3_NS.raw
-data/gcms/rawdata/Hot/150125_C_WI_3_S.raw
-data/gcms/rawdata/New folder/150125_Blank.raw
-data/gcms/rawdata/New folder/150125_C_MA_1_NS.raw
-data/gcms/rawdata/New folder/150125_C_MA_2_NS.raw
-data/gcms/rawdata/New folder/150125_C_MA_3_NS.raw
-data/gcms/rawdata/New folder/150125_C_MEC_1_NS.raw
-data/gcms/rawdata/New folder/150125_C_MEC_2_NS.raw
-data/gcms/rawdata/New folder/150125_C_MEC_3_NS.raw
-data/gcms/rawdata/New folder/150125_C_MT5_1_NS.raw
-data/gcms/rawdata/New folder/150125_C_MT5_2_NS.raw
-data/gcms/rawdata/New folder/150125_C_MT5_3_NS.raw
-data/gcms/rawdata/New folder/150125_C_NGE_1_NS.raw
-data/gcms/rawdata/New folder/150125_C_NGE_2_NS.raw
-data/gcms/rawdata/New folder/150125_C_NGE_3_NS.raw
-data/gcms/rawdata/New folder/150125_C_WI_1_NS.raw
-data/gcms/rawdata/New folder/150125_C_WI_2_NS.raw
-data/gcms/rawdata/New folder/150125_C_WI_3_NS.raw
-data/gcms/rawdata/New folder/150125_F_MA_1_NS.raw
-data/gcms/rawdata/New folder/150125_F_MA_2_NS.raw
-data/gcms/rawdata/New folder/150125_F_MA_3_NS.raw
-data/gcms/rawdata/New folder/150125_F_MEC_1_NS.raw
-data/gcms/rawdata/New folder/150125_F_MEC_2_NS.raw
-data/gcms/rawdata/New folder/150125_F_MEC_3_NS.raw
-data/gcms/rawdata/New folder/150125_F_MT5_1_NS.raw
-data/gcms/rawdata/New folder/150125_F_MT5_2_NS.raw
-data/gcms/rawdata/New folder/150125_F_MT5_3_NS.raw
-data/gcms/rawdata/New folder/150125_F_NGE_1_NS.raw
-data/gcms/rawdata/New folder/150125_F_NGE_2_NS.raw
-data/gcms/rawdata/New folder/150125_F_NGE_3_NS.raw
-data/gcms/rawdata/New folder/150125_F_WI_1_NS.raw
-data/gcms/rawdata/New folder/150125_F_WI_2_NS.raw
-data/gcms/rawdata/New folder/150125_F_WI_3_NS.raw
-data/gcms/rawdata/New folder/Conversion/150125_blank.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MA_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MA_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MA_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MEC_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MEC_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MEC_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MT5_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MT5_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_MT5_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_NGE_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_NGE_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_NGE_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_WI_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_WI_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_C_WI_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MA_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MA_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MA_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MEC_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MEC_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MEC_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MT5_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MT5_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_MT5_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_NGE_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_NGE_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_NGE_3_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_WI_1_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_WI_2_NS.mzML
-data/gcms/rawdata/New folder/Conversion/150125_F_WI_3_NS.mzML
-data/processed/archived/dataset_keyodorants_infuses_new.csv
-data/processed/archived/dataset_keyodorants_infuses.csv
-data/processed/archived/dataset_keyodorants&PanelData_infuses.csv
-data/processed/archived/feature_table.csv
-data/processed/archived/metadata.csv
-data/processed/archived/Quantificazione_Volatili_Infusi_TABLES.xlsx
-data/processed/archived/Volatili_Infusi - Clean_Identification.xlsx
-data/processed/archived/Volatili_Infusi - Complete Indetification_UPDATED.xlsx
-data/processed/archived/Volatili_Infusi - Tabella Aggiornata.xlsx
+#ignore entire data folder
+data/input/rawdata/
+data/output/archived/
+data/output/others/
+results/
+scripts/outputs/sPLS-DA/
+notebook/outputs/
+
+#ignore all .DS_Store
+.DS_Store
+scripts/old_sPLS-DA.R
+scripts/sPLS-DA.R
+scripts/test.R
+notebook/03_random.ipynb
+notebook/99_trash.ipynb
+scripts/sPLS-DA.R

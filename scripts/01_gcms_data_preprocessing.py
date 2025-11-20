@@ -1,16 +1,20 @@
-# === Imports ==============================================================
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from sklearn.preprocessing import StandardScaler
+import sys
+import os
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+from src.utils import load_config # noqa: E402
 
-# === Path ================================================================
-FEATURES = Path(r"C:\Users\david\OneDrive - Università degli Studi di Parma\PhD\Projects\Coffee_leaf_infuses\data\processed\feature_table.csv")
-METADATA = Path(r"C:\Users\david\OneDrive - Università degli Studi di Parma\PhD\Projects\Coffee_leaf_infuses\data\gcms\volatile_infuses_metadata.tsv")
+#load config file
+config = load_config(path='config/config.yaml', section='gc-ms')
 
-output_dir = Path(".") / "outputs"
-output_dir.mkdir(exist_ok=True)
+FEATURES = Path(config['ftable'])
+METADATA = Path(config['metadata'])
 
 # === Metadata ========================================================
 sample_col = 'ATTRIBUTE_Sample'
@@ -18,9 +22,7 @@ temp_col = 'ATTRIBUTE_Extraction'
 group_col = 'ATTRIBUTE_Group'
 
 # === Import data ========================================================
-print("\n" + "="*70)
 print("DATA IMPORT")
-print("="*70)
 
 feat_df = pd.read_csv(FEATURES, index_col=0)
 print(f"\n Feature table loaded: {feat_df.shape[0]} metabolites × {feat_df.shape[1]} samples")
@@ -29,9 +31,7 @@ meta_raw = pd.read_csv(METADATA, sep='\t')
 print(f"Metadata loaded: {meta_raw.shape[0]} entries")
 
 # === Verify metadata-features matching =======================================
-print("\n" + "="*70)
 print("METADATA-FEATURES CONSISTENCY CHECK")
-print("="*70)
 
 meta_raw = meta_raw[meta_raw[sample_col].isin(feat_df.columns)].copy()
 samples_in_features = set(feat_df.columns)
@@ -43,20 +43,18 @@ if missing_in_metadata:
     print(f"WARNING: {len(missing_in_metadata)} samples in features but NOT in metadata:")
     print(f"   {missing_in_metadata}")
 else:
-    print(f"All feature samples have metadata")
+    print("All feature samples have metadata")
 
 if missing_in_features:
     print(f"WARNING: {len(missing_in_features)} samples in metadata but NOT in features:")
     print(f"   {missing_in_features}")
 else:
-    print(f"All metadata samples are in features")
+    print("All metadata samples are in features")
 
 print(f"\nMetadata samples matched with features: {len(samples_in_metadata)}")
 
 # === Split by extraction temperature ==========================================
-print("\n" + "="*70)
-print("DATASET SPLIT: HOT vs COLD")
-print("="*70)
+print("Dataset split in HOT and COLD")
 
 hot_cols = meta_raw.loc[meta_raw[temp_col].str.contains('hot', case=False, na=False), sample_col].tolist()
 cold_cols = meta_raw.loc[meta_raw[temp_col].str.contains('cold', case=False, na=False), sample_col].tolist()
@@ -70,25 +68,11 @@ cold_df = feat_df[cold_cols].copy()
 grp_map = meta_raw.set_index(sample_col)[group_col].rename('Group')
 
 # === Check for NaN values ====================================================
-print("\n" + "="*70)
-print("NaN VALUE CHECK")
-print("="*70)
+print("NaN check")
 
 def check_nan_values(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
     """
     Check for NaN values in the dataset.
-    
-    Parameters:
-    -----------
-    df : pd.DataFrame
-        Feature matrix to check
-    dataset_name : str
-        Name of the dataset (for printing)
-        
-    Returns:
-    --------
-    pd.DataFrame
-        Input dataframe unchanged (for chaining)
     """
     nan_count = df.isna().sum().sum()
     nan_percentage = (nan_count / (df.shape[0] * df.shape[1])) * 100
@@ -101,10 +85,10 @@ def check_nan_values(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
         print(f"    Max NaN per feature: {nan_features.max()}")
         
         # Fill NaN with 0 (common for missing abundances)
-        print(f"    → Filling NaN with 0...")
+        print("Filling NaN with 0")
         df = df.fillna(0)
     else:
-        print(f"✓ {dataset_name}: No NaN values detected")
+        print(f"{dataset_name}: No NaN values detected")
     
     return df
 
@@ -112,9 +96,7 @@ hot_df = check_nan_values(hot_df, "HOT dataset")
 cold_df = check_nan_values(cold_df, "COLD dataset")
 
 # === FEATURE FILTERING ===============================================
-print("\n" + "="*70)
-print("FEATURE FILTERING: Removing empty features")
-print("="*70)
+print("Feature filtering: removing empty features")
 
 def filter_empty_features(df: pd.DataFrame, 
                          min_prevalence: float = 0.2,
@@ -122,10 +104,6 @@ def filter_empty_features(df: pd.DataFrame,
                          dataset_name: str = "Dataset") -> pd.DataFrame:
     """
     Filter features (rows) based on prevalence and abundance thresholds.
-    
-    A feature is retained if it appears (with value > min_abundance) in at least
-    min_prevalence fraction of samples. This is standard in metabolomics to remove
-    rare or missing features that may introduce noise.
     
     Parameters:
     -----------
@@ -141,10 +119,6 @@ def filter_empty_features(df: pd.DataFrame,
     dataset_name : str
         Name of dataset for logging
         
-    Returns:
-    --------
-    pd.DataFrame
-        Filtered feature matrix (only features meeting thresholds)
     """
     n_features_original = df.shape[0]
     n_samples = df.shape[1]
@@ -160,7 +134,7 @@ def filter_empty_features(df: pd.DataFrame,
     n_features_filtered = df_filtered.shape[0]
     n_removed = n_features_original - n_features_filtered
     
-    print(f"\n📊 {dataset_name} Filtering Results:")
+    print(f"\n{dataset_name} Filtering Results:")
     print(f"   Original features: {n_features_original}")
     print(f"   Removed: {n_removed} ({100*n_removed/n_features_original:.1f}%)")
     print(f"   Retained: {n_features_filtered} ({100*n_features_filtered/n_features_original:.1f}%)")
@@ -174,9 +148,7 @@ hot_df = filter_empty_features(hot_df, min_prevalence=0.2, dataset_name="HOT")
 cold_df = filter_empty_features(cold_df, min_prevalence=0.2, dataset_name="COLD")
 
 # === Summary of filtering ====================================================
-print("\n" + "="*70)
-print("FEATURE FILTERING SUMMARY")
-print("="*70)
+print("Feature filtering summary")
 
 summary_data = {
     'Dataset': ['HOT', 'COLD'],
@@ -188,36 +160,11 @@ summary_df = pd.DataFrame(summary_data)
 print("\n" + summary_df.to_string(index=False))
 
 # === Data preprocessing ===================================================
-print("\n" + "="*70)
-print("DATA AUTOSCALING (STANDARDIZATION)")
-print("="*70)
+print("Data autoscaling")
 
 def process_data(df: pd.DataFrame, dataset_name: str = "Dataset") -> pd.DataFrame:
     """
-    Apply autoscaling (standardization) to the feature data.
-    
-    Autoscaling ensures each metabolite (feature) has mean=0 and std=1 across all
-    samples. This is crucial for multivariate analysis methods like PCA and PLS
-    that are sensitive to variable scaling.
-    
-    Process:
-    --------
-    1. Transpose matrix from (metabolites × samples) to (samples × metabolites)
-    2. Apply StandardScaler to each column (metabolite) independently
-    3. Each metabolite gets: (value - mean) / std
-    
-    Parameters:
-    -----------
-    df : pd.DataFrame
-        Input feature matrix (metabolites × samples)
-    dataset_name : str
-        Name of dataset for logging
-        
-    Returns:
-    --------
-    pd.DataFrame
-        Autoscaled feature matrix (samples × metabolites)
-        Each metabolite: mean≈0, std≈1
+    Apply autoscaling
     """
     print(f"\n{dataset_name}:")
     print(f"  Input shape: {df.shape[0]} metabolites × {df.shape[1]} samples")
@@ -227,8 +174,6 @@ def process_data(df: pd.DataFrame, dataset_name: str = "Dataset") -> pd.DataFram
     print(f"  Transposed: {df_transposed.shape[0]} samples × {df_transposed.shape[1]} metabolites")
     
     # Step 2: Apply StandardScaler
-    # StandardScaler().fit_transform() scales COLUMNS independently
-    # So each metabolite (column) gets mean=0, std=1 across samples
     scaler = StandardScaler()
     scaled_array = scaler.fit_transform(df_transposed)
     
@@ -243,21 +188,21 @@ def process_data(df: pd.DataFrame, dataset_name: str = "Dataset") -> pd.DataFram
     means_per_metabolite = scaled_df.mean(axis=0)
     stds_per_metabolite = scaled_df.std(axis=0)
     
-    print(f"\nAutoscaling Validation (per metabolite):")
+    print("\n Autoscaling Validation (per metabolite):")
     print(f"     Means: min={means_per_metabolite.min():.2e}, max={means_per_metabolite.max():.2e} (expect ≈0)")
     print(f"     Stds:  min={stds_per_metabolite.min():.4f}, max={stds_per_metabolite.max():.4f} (expect ≈1)")
     
     # Strict validation
     if not np.allclose(means_per_metabolite, 0, atol=1e-10):
-        print(f"WARNING: Some metabolites have non-zero mean!")
+        print(" WARNING: Some metabolites have non-zero mean!")
     
     if not np.allclose(stds_per_metabolite, 1, atol=1e-10):
-        print(f"WARNING: Some metabolites have non-unit std!")
+        print(" WARNING: Some metabolites have non-unit std!")
     
     # Global statistics
     global_mean = scaled_df.values.mean()
     global_std = scaled_df.values.std()
-    print(f"\n  Global statistics:")
+    print("\n  Global statistics:")
     print(f"     Mean: {global_mean:.6f}")
     print(f"     Std: {global_std:.6f}")
     print(f"     Output shape: {scaled_df.shape[0]} samples × {scaled_df.shape[1]} metabolites")
@@ -269,9 +214,7 @@ hot_scaled = process_data(hot_df, dataset_name="HOT Dataset")
 cold_scaled = process_data(cold_df, dataset_name="COLD Dataset")
 
 # === Final data summary =====================================================
-print("\n" + "="*70)
-print("PREPROCESSING COMPLETE - FINAL DATA SUMMARY")
-print("="*70)
+print("Preprocessed data summary")
 
 print("\n HOT Dataset (autoscaled):")
 print(f"   Shape: {hot_scaled.shape[0]} samples × {hot_scaled.shape[1]} metabolites")
@@ -283,35 +226,52 @@ print(f"   Shape: {cold_scaled.shape[0]} samples × {cold_scaled.shape[1]} metab
 print(f"   Sample names: {list(cold_scaled.index[:5])}... (showing first 5)")
 print(f"   Metabolite names: {list(cold_scaled.columns[:5])}... (showing first 5)")
 
-# === Optional: Save preprocessed data ========================================
-print("\n" + "="*70)
-print("OPTIONAL: SAVING PREPROCESSED DATA")
-print("="*70)
+# === Save preprocessed data ========================================
 
-output_dir = Path(".") / "outputs"
-output_dir.mkdir(exist_ok=True)
+hot_scaled.to_csv(config['ftable_hot'])
+cold_scaled.to_csv(config['ftable_cold'])
+print("File saved as feature_table_hot.csv and feature_table_cold.csv")
 
-try:
-    hot_scaled.to_csv(output_dir / "hot_scaled.csv")
-    cold_scaled.to_csv(output_dir / "cold_scaled.csv")
-    print(f"\n✓ Preprocessed data saved to {output_dir}/")
-    print(f"  - hot_scaled.csv")
-    print(f"  - cold_scaled.csv")
-except Exception as e:
-    print(f"\n Error saving files: {e}")
+# === MetaboAnalyst export ===================================================
+def export_for_metaboanalyst(df: pd.DataFrame, groups: pd.Series, output_path: str):
+    """
+    Export DataFrame for MetaboAnalyst 
+    """
+    # Create a copy to avoid modifying the original dataframe
+    ma_df = df.copy()
+    
+    # Map the groups using the Sample ID (index)
+    # We insert it at position 0 (first column)
+    ma_df.insert(0, 'Class', ma_df.index.map(groups))
+    
+    # Give the index a name (MetaboAnalyst prefers 'Sample' or empty)
+    ma_df.index.name = 'Sample'
+    
+    # Check for missing labels
+    if ma_df['Class'].isna().any():
+        n_missing = ma_df['Class'].isna().sum()
+        print(f"WARNING: {n_missing} samples in {output_path} are missing a Group label!")
+    
+    # Save
+    ma_df.to_csv(output_path)
+    print(f" > Saved: {output_path} ({ma_df.shape[0]} samples x {ma_df.shape[1]} cols)")
+    
+    # Preview format
+    print(f"   Format preview:\n{ma_df.iloc[:2, :3].to_string()}\n")
 
-# === Display sample data ====================================================
-print("\n" + "="*70)
-print("SAMPLE DATA")
-print("="*70)
+# Export HOT dataset
+export_for_metaboanalyst(
+    hot_scaled, 
+    grp_map, 
+    config['ma_ftable_hot']
+)
 
-print("\nHOT Dataset:")
-print(hot_scaled.iloc[:5, :5])
+# Export COLD dataset
+export_for_metaboanalyst(
+    cold_scaled, 
+    grp_map, 
+    config['ma_ftable_cold']
+)
 
-print("\nCOLD Dataset:")
-print(cold_scaled.iloc[:5, :5])
-
-print("\n" + "="*70)
-print("PREPROCESSING COMPLETE")
-print("="*70 + "\n")
-
+print("MetaboAnalyst export complete")
+print("Volatile preprocessing script finished successfully.")

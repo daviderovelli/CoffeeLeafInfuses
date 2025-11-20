@@ -1,0 +1,15 @@
+#input/output file paths
+gc-ms: 
+  metadata: data/input/volatile_infuses_metadata.tsv
+  ftable_input: data/input/input_feature_table.csv
+  ftable: data/output/feature_table.csv
+  ftable_hot: data/output/feature_table_hot.csv #scaled data
+  ftable_cold: data/output/feature_table_cold.csv #scaled data
+  ma_ftable_hot: data/output/ma_feature_table_hot.csv #scaled data and format for MetaboAnalyst
+  ma_ftable_cold: data/output/ma_feature_table_cold.csv #scaled data and format for MetaboAnalyst
+
+sensory:
+  sensory_table_input: data/input/paneldata_infuses_full.csv
+  stable_hot: data/output/sensory_table_hot.csv
+  stable_cold: data/output/sensory_table_cold.csv
+  

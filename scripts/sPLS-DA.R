@@ -1,24 +1,38 @@
-# # Install BiocManager if not installed 
-# if (!requireNamespace("BiocManager", quietly = TRUE))    
-# install.packages("BiocManager")
-# # Install mixOmics
-# BiocManager::install("mixOmics")
-# # Install other required CRAN packages
-# install.packages(c("ggplot2", "dplyr", "tidyr", "svglite"))
+# ============================================================================
+# sPLS-DA ANALYSIS WITH LOADING PLOTS, SCORE PLOTS, AND STATISTICAL TESTS
+# ============================================================================
+# Author: David Rovelli
+# Date: 2025-11-03
+# Purpose: Complete sPLS-DA analysis including visualizations and statistics
+# ============================================================================
 
-# Load libraries
+# Install packages (uncomment if needed)
+# if (!requireNamespace("BiocManager", quietly = TRUE))    
+#   install.packages("BiocManager")
+# BiocManager::install("mixOmics")
+# install.packages(c("ggplot2", "dplyr", "tidyr", "svglite", "ggpubr", "rstatix"))
+
+# ============================================================================
+# LOAD LIBRARIES
+# ============================================================================
 library(mixOmics)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(svglite)
+library(ggpubr)
+library(rstatix)
 
-# Load data
+# ============================================================================
+# LOAD DATA
+# ============================================================================
 hot_infuses <- read.csv("C:\\Users\\david\\OneDrive - Università degli Studi di Parma\\PhD\\Projects\\Coffee_leaf_infuses\\data\\processed\\others\\hot_scaled_metaboanalyst.csv", row.names = 1)
 cold_infuses <- read.csv("C:\\Users\\david\\OneDrive - Università degli Studi di Parma\\PhD\\Projects\\Coffee_leaf_infuses\\data\\processed\\others\\cold_scaled_metaboanalyst.csv", row.names = 1)
 
-# Function to prepare data and create sPLS-DA model
-splsda_model <- function(data, keepX = c(50, 30)) {
+# ============================================================================
+# FUNCTION: PREPARE DATA AND CREATE sPLS-DA MODEL
+# ============================================================================
+splsda_model <- function(data, keepX = c(15, 15)) {
   X <- t(data)
   
   # Create the response factor
@@ -32,7 +46,9 @@ splsda_model <- function(data, keepX = c(50, 30)) {
   return(splsda_result)
 }
 
-# Function to create loading plots
+# ============================================================================
+# FUNCTION: CREATE LOADING PLOTS
+# ============================================================================
 plot_loadings_points <- function(splsda_obj, comp = 1, ndisplay = 25, 
                                  title_text = "Loadings", outcome_colors = NULL) {
   
@@ -88,7 +104,7 @@ plot_loadings_points <- function(splsda_obj, comp = 1, ndisplay = 25,
     geom_segment(aes(xend = 0, yend = variable, color = NA), size = 0.3, color = "#CCCCCC", linetype = "dotted") +
     scale_fill_manual(
       values = outcome_colors,
-      name = "Outcome",
+      name = "Legend",
       na.value = "#CCCCCC"
     ) +
     theme_minimal() +
@@ -116,7 +132,9 @@ plot_loadings_points <- function(splsda_obj, comp = 1, ndisplay = 25,
   return(p)
 }
 
-# Function to create scoreplot
+# ============================================================================
+# FUNCTION: CREATE SCORE PLOTS
+# ============================================================================
 plot_scoreplot <- function(splsda_obj, comp_x = 1, comp_y = 2,
                           title_text = "Score Plot", outcome_colors = NULL) {
   
@@ -149,11 +167,11 @@ plot_scoreplot <- function(splsda_obj, comp_x = 1, comp_y = 2,
     geom_point(size = 4, stroke = 1.5, alpha = 0.8, shape = 21) +
     scale_color_manual(
       values = outcome_colors,
-      name = "Outcome"
+      name = "Legend"
     ) +
     scale_fill_manual(
       values = outcome_colors,
-      name = "Outcome"
+      name = "Legend"
     ) +
     theme_minimal() +
     labs(
@@ -181,7 +199,9 @@ plot_scoreplot <- function(splsda_obj, comp_x = 1, comp_y = 2,
   return(p)
 }
 
-# Function to generate and save plots (loadings + scoreplots)
+# ============================================================================
+# FUNCTION: GENERATE AND SAVE PLS-DA PLOTS
+# ============================================================================
 generate_and_save_plots <- function(splsda_obj, dataset_name, outcome_colors, 
                                    output_dir = "scripts/outputs/sPLS-DA") {
   
@@ -238,11 +258,118 @@ generate_and_save_plots <- function(splsda_obj, dataset_name, outcome_colors,
   print(scoreplot_comp1_2)
   
   cat("\n✓ Plots saved for:", dataset_name, "\n")
-  cat("  - hot_loadings_comp1/2_points.png/svg\n")
-  cat("  - hot_scoreplot_comp1_comp2.png/svg\n\n")
+  cat("  -", dataset_name, "_loadings_comp1/2_points.png/svg\n")
+  cat("  -", dataset_name, "_scoreplot_comp1_comp2.png/svg\n\n")
 }
 
-# Define colors (consistent for all analyses)
+# ============================================================================
+# FUNCTION: CREATE BOXPLOTS FOR SELECTED MOLECULES
+# ============================================================================
+plot_molecules_boxplot <- function(data, molecule_list, dataset_name, 
+                                   outcome_colors = NULL, nrow = 2, ncol = 3) {
+  
+  # Transpose data for easier access
+  X <- t(data)
+  
+  # Create the response factor
+  sample_names <- rownames(X)
+  Y <- sapply(strsplit(sample_names, "_"), `[`, 1)
+  Y <- as.factor(Y)
+  
+  # Create dataframe for plotting
+  plot_data <- data.frame()
+  
+  for (molecule in molecule_list) {
+    if (molecule %in% colnames(X)) {
+      temp_df <- data.frame(
+        molecule = molecule,
+        value = X[, molecule],
+        outcome = Y
+      )
+      plot_data <- rbind(plot_data, temp_df)
+    } else {
+      cat("Warning: Molecule", molecule, "not found in data\n")
+    }
+  }
+  
+  # Define default colors if not provided
+  if(is.null(outcome_colors)) {
+    outcomes_unique <- unique(Y)
+    outcome_colors <- c(
+      "#E75480", "#0B7285", "#2E7D32", "#F57C00", "#1565C0"
+    )
+    names(outcome_colors) <- levels(outcomes_unique)
+  }
+  
+  # Create faceted boxplot
+  p <- ggplot(plot_data, aes(x = outcome, y = value, fill = outcome)) +
+    geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 2, 
+                  outlier.stroke = 1, color = "black") +
+    geom_jitter(width = 0.2, size = 2, alpha = 0.5, shape = 21, 
+                color = "black", stroke = 0.5) +
+    scale_fill_manual(
+      values = outcome_colors,
+      name = "Legend"
+    ) +
+    facet_wrap(~molecule, scales = "free_y", nrow = nrow, ncol = ncol) +
+    theme_minimal() +
+    labs(
+      title = paste("Selected Key Odorant Compounds -", dataset_name),
+      x = "Samples",
+      y = "Scaled Intensity"
+    ) +
+    theme(
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5, margin = margin(b = 15)),
+      axis.title = element_text(size = 11, face = "bold"),
+      axis.text = element_text(size = 9),
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major.y = element_line(color = "#E0E0E0", size = 0.2),
+      panel.grid.minor = element_blank(),
+      legend.position = "right",
+      legend.title = element_text(size = 10, face = "bold"),
+      legend.text = element_text(size = 9),
+      strip.text = element_text(size = 10, face = "bold"),
+      plot.margin = margin(15, 15, 15, 15)
+    )
+  
+  return(p)
+}
+
+# ============================================================================
+# FUNCTION: SAVE MOLECULES PLOTS
+# ============================================================================
+save_molecules_plots <- function(plot_obj, dataset_name, 
+                                molecule_names = NULL,
+                                suffix = "",
+                                output_dir = "scripts/outputs/sPLS-DA",
+                                width = 14, height = 10) {
+  
+  # Create output directory if it doesn't exist
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
+  
+  # Generate filename
+  filename_base <- paste0(dataset_name, "_molecules_boxplot", suffix)
+  if (!is.null(molecule_names) && length(molecule_names) > 0) {
+    short_names <- substr(molecule_names[1:min(3, length(molecule_names))], 1, 10)
+    filename_base <- paste0(filename_base, "_", paste(short_names, collapse = "_"))
+  }
+  
+  # PNG
+  png_path <- file.path(output_dir, paste0(filename_base, ".png"))
+  ggsave(png_path, plot_obj, width = width, height = height, dpi = 300)
+  cat("✓ PNG saved:", basename(png_path), "\n")
+  
+  # SVG
+  svg_path <- file.path(output_dir, paste0(filename_base, ".svg"))
+  ggsave(svg_path, plot_obj, width = width, height = height, dpi = 300)
+  cat("✓ SVG saved:", basename(svg_path), "\n")
+}
+
+# ============================================================================
+# DEFINE COLORS (CONSISTENT FOR ALL ANALYSES)
+# ============================================================================
 hot_outcome_colors <- c(
   "H.M.EC" = "#E75480",
   "H.M.T5" = "#0B7285",
@@ -260,17 +387,100 @@ cold_outcome_colors <- c(
 )
 
 # ============================================================================
-# RUN HOT INFUSES
+# DEFINE MOLECULES OF INTEREST
 # ============================================================================
-cat("Processing HOT infuses...\n")
-splsda_hot <- splsda_model(hot_infuses, keepX = c(50, 30))
+hot_molecules_of_interest <- c(
+  "Benzeneethanol", 
+  "Pentanal", 
+  "Linalool", 
+  "Linalool oxide", 
+  "trans-beta-Ionone", 
+  "Benzene methanol", 
+  "beta-Cyclocitral",
+  "Octanoic acid", 
+  "3,5-Octadien-2-one", 
+  "Hexanal", 
+  "2-Hexenal, (E)-", 
+  "Benzaldehyde", 
+  "Nonanal", 
+  "Methyl salicylate"
+)
+
+
+cold_molecules_of_interest <- c(
+  "Benzeneethanol",
+  "Linalool",
+  "D-Limonene", 
+  "trans-beta-Ionone",
+  "Benzene methanol",
+  "beta-Cyclocitral",
+  "3,5-Octadien-2-one",
+  "2-Hexenal, (E)-",
+  "Benzaldehyde",
+  "Nonanal", 
+  "Methyl salicylate"
+)
+
+# ============================================================================
+# RUN HOT INFUSES - sPLS-DA ANALYSIS
+# ============================================================================
+cat("\n", strrep("=", 80), "\n")
+cat("PROCESSING HOT INFUSES - sPLS-DA\n")
+cat(strrep("=", 80), "\n\n")
+
+splsda_hot <- splsda_model(hot_infuses, keepX = c(15, 15))
 generate_and_save_plots(splsda_hot, "hot", hot_outcome_colors)
 
 # ============================================================================
-# RUN COLD INFUSES
+# RUN COLD INFUSES - sPLS-DA ANALYSIS
 # ============================================================================
-cat("Processing COLD infuses...\n")
-splsda_cold <- splsda_model(cold_infuses, keepX = c(50, 30))
+cat("\n", strrep("=", 80), "\n")
+cat("PROCESSING COLD INFUSES - sPLS-DA\n")
+cat(strrep("=", 80), "\n\n")
+
+splsda_cold <- splsda_model(cold_infuses, keepX = c(15, 15))
 generate_and_save_plots(splsda_cold, "cold", cold_outcome_colors)
 
-cat("Analyses completed!\n")
+# ============================================================================
+# BOXPLOTS FOR HOT INFUSES
+# ============================================================================
+cat("\n", strrep("=", 80), "\n")
+cat("GENERATING BOXPLOTS FOR HOT INFUSES\n")
+cat(strrep("=", 80), "\n\n")
+
+hot_molecules_plot <- plot_molecules_boxplot(hot_infuses, 
+                                             hot_molecules_of_interest,
+                                             "HOT",
+                                             hot_outcome_colors,
+                                             nrow = 3, ncol = 5)
+print(hot_molecules_plot)
+save_molecules_plots(hot_molecules_plot, "hot", hot_molecules_of_interest, width = 18, height = 12)
+
+# ============================================================================
+# BOXPLOTS FOR COLD INFUSES
+# ============================================================================
+cat("\n", strrep("=", 80), "\n")
+cat("GENERATING BOXPLOTS FOR COLD INFUSES\n")
+cat(strrep("=", 80), "\n\n")
+
+cold_molecules_plot <- plot_molecules_boxplot(cold_infuses, 
+                                              cold_molecules_of_interest,
+                                              "COLD",
+                                              cold_outcome_colors,
+                                              nrow = 3, ncol = 5)
+print(cold_molecules_plot)
+save_molecules_plots(cold_molecules_plot, "cold", cold_molecules_of_interest, width = 18, height = 12)
+
+
+# ============================================================================
+# ANALYSIS SUMMARY
+# ============================================================================
+cat("\n", strrep("=", 80), "\n")
+cat("ANALYSIS COMPLETED SUCCESSFULLY!\n")
+cat(strrep("=", 80), "\n\n")
+
+cat("OUTPUT GENERATED:\n")
+cat("  ✓ Molecules boxplots without p-values (hot & cold)\n")
+
+cat("Files saved in: scripts/outputs/sPLS-DA/\n")
+cat(strrep("=", 80), "\n")

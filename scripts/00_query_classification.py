@@ -1,15 +1,26 @@
 import pandas as pd
+import numpy as np
 import requests
 import time
 from concurrent.futures import ThreadPoolExecutor
+import sys
+import os
 
-# Percorso al file CSV
-csv_path = r"C:\Users\david\OneDrive - Università degli Studi di Parma\PhD\Projects\Coffee_leaf_infuses\data\processed\feature_table.csv"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+from src.utils import load_config # noqa: E402
 
-# Leggi il CSV
+#load config file
+config = load_config(path='config/config.yaml', section='gc-ms')
+
+# Path to the CSV file
+print("Loading feature table...")
+csv_path = config['ftable_input']
 df = pd.read_csv(csv_path)
 
-# Funzione per ottenere SMILES da InChIKey tramite PubChem
+# Function to get SMILES from InChIKey via PubChem
+print("Retrieving SMILES structures from PubChem...")
 def get_smiles_from_inchikey(inchikey):
     url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/inchikey/{inchikey}/property/CanonicalSMILES/CSV"
     try:
@@ -22,24 +33,25 @@ def get_smiles_from_inchikey(inchikey):
         pass
     return None
 
-# Appendi una nuova colonna SMILES se non esiste già
+# Add a new SMILES column if it doesn't already exist
 if "SMILES" not in df.columns:
     smiles_list = []
     if "InChIKey" not in df.columns:
-        raise ValueError("La colonna 'InChIKey' non è presente nel file CSV.")
+        raise ValueError("The 'InChIKey' column is not present in the CSV file.")
     for inchikey in df["InChIKey"]:
         if pd.isna(inchikey) or str(inchikey).strip() == "":
             smiles_list.append(None)
             continue
         smiles = get_smiles_from_inchikey(str(inchikey).strip())
         smiles_list.append(smiles)
-        time.sleep(0.2)  # Rispetta i limiti di PubChem
+        time.sleep(0.2)
     df["SMILES"] = [s.replace('"', '') if isinstance(s, str) else s for s in smiles_list]
 
-# Cache per i risultati della classificazione SMILES
+# Cache for SMILES classification results
 smiles_cache = {}
 
-# Funzione per classificare una struttura SMILES
+# Function to classify a SMILES structure
+print("Classifying SMILES structures using NPClassifier...")
 def classify_smiles(smiles):
     if pd.isna(smiles) or smiles is None:
         return None
@@ -53,38 +65,65 @@ def classify_smiles(smiles):
             smiles_cache[smiles] = result
             return result
         else:
-            print(f"Errore API per {smiles}: {response.status_code}")
+            print(f"Error API for {smiles}: {response.status_code}")
             return None
     except requests.RequestException as e:
-        print(f"Errore di connessione per {smiles}: {e}")
+        print(f"Connection error for {smiles}: {e}")
         return None
 
-# Funzione per pulire i valori delle colonne classificate
+# Function to clean classified column values
 def clean_value(value):
+    """Normalize classification cell values into printable strings.
+    """
+    # Preserve None/NaN
+    if value is None:
+        return None
+    try:
+        if pd.isna(value):
+            return value
+    except Exception:
+        # pd.isna may raise for some types; ignore and continue
+        pass
+
+    # Handle numpy arrays and pandas Series
+    if isinstance(value, (np.ndarray, pd.Series)):
+        if getattr(value, 'size', 0) == 0:
+            return None
+        # Convert to list for consistent handling
+        value = value.tolist()
+
+    # Join lists into comma-separated strings
     if isinstance(value, list):
-        # Unisci gli elementi in una stringa separata da virgole
         return ", ".join(str(v) for v in value)
+
+    # Clean simple strings
     if isinstance(value, str):
         return value.replace('[', '').replace(']', '').replace("'", '')
-# Classifica tutte le strutture SMILES usando ThreadPoolExecutor
+
+    # Fallback: stringify other types
+    return str(value)
+
+# Classify all SMILES structures using ThreadPoolExecutor
 if "SMILES" not in df.columns:
-    raise ValueError("La colonna 'SMILES' non è presente nel DataFrame.")
+    raise ValueError("The 'SMILES' column is not present in the DataFrame.")
 with ThreadPoolExecutor(max_workers=5) as executor:
     classifications = list(executor.map(classify_smiles, df['SMILES']))
 with ThreadPoolExecutor(max_workers=5) as executor:
     classifications = list(executor.map(classify_smiles, df['SMILES']))
 
-# Aggiungi i risultati della classificazione al DataFrame
+# Add classification results to the DataFrame
 df['class_results'] = [x.get('class_results') if x else None for x in classifications]
 df['superclass_results'] = [x.get('superclass_results') if x else None for x in classifications]
 df['pathway_results'] = [x.get('pathway_results') if x else None for x in classifications]
 df['isglycoside'] = [x.get('isglycoside') if x else None for x in classifications]
 
-# Pulizia delle colonne di classificazione
+# Clean classified columns
 for column in ['class_results', 'superclass_results', 'pathway_results', 'isglycoside']:
     if column in df.columns:
-        df[column] = df[column].apply(lambda x: clean_value(x) if pd.notna(x) else x)
+        # Apply clean_value directly; clean_value internally handles NA/None and
+        # array-like inputs safely.
+        df[column] = df[column].apply(clean_value)
 
-# Salva il risultato
-df.to_csv(r"C:\Users\david\OneDrive - Università degli Studi di Parma\PhD\Projects\Coffee_leaf_infuses\data\processed\feature_table_with_smiles.csv", index=False)
-print("File salvato come feature_table_with_smiles.csv")
+# Save the result
+df.to_csv(config['ftable'], index=False)
+print("File saved as feature_table.csv")
