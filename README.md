@@ -21,11 +21,6 @@ conda env create -f requirements.yaml
 conda activate coffeeleafinfuses
 ~~~
 
-Before, running any scripts, set the `PYTHONPATH` to the project root so that internal imports work correctly:
-~~~
-$env:PYTHONPATH = "$(Get-Location)"
-~~~
-
 Alternatively, if you are using macOS or Linux, you can run the setup script instead:
 
 ~~~
@@ -41,25 +36,23 @@ This script checks if the environment already exists, creates it if needed, inst
 
     - `input`: contains the input tables from the sensory assessment (`paneldata_infuses_full.csv`) and the volatile feature table (`input_feature_table.csv`).
 
-    - `processed`: contains the outupt generated from the python scripts (see [Usage/Scipts](#scripts)) used as prerequisite for the whole analysis. 
+    - `ouput`: contains the outupts generated from the python scripts (see [Usage/Scipts](#scripts)) used as prerequisite for the whole analysis carried outusing the Jupiter Notebooks (see [Usage/Notebooks](#notebooks))
 
 - The `scripts` and `notebooks` folders contain Python scripts and Jupyter Notebooks to reproduce and run the data analysis (see [Usage](#usage)).
 
-- The `results` folder contains output files generated from data analysis, summary tables and figures.
+- The `results` folder contains output files generated from data analysis such as summary tables and figures.
 
 ## Usage
-The `paneldata_infuses_full.csv` contains the data collected during the sensory assesment of the samples under the analysis. The `feature_table.csv` contains all the annotations retrived in the study using a HS-SPME-GC-MS paltform (the method is described in the original publication).
+The `paneldata_infuses_full.csv` contains the data collected during the sensory assesment of the samples under the analysis. The `input_feature_table.csv` contains all the annotations retrived in the study using a HS-SPME-GC-MS paltform (the method is described in the original publication).
 
 ### Scripts: 
 - `00_query_classification.py`: query the InChiKey in the feature table and fetch the cannonical SMILES form PubChem. For every SMILES, it classifies the compounds using NPClassifier API.
 
-- `01_gcms_data_preprocessing.py`: the script loads a feature table and a metadata table, checks consistency, splits samples by extraction temperature (HOT vs COLD), filters and cleans features, autoscale-standardizes the data per metabolite. 
+- `01_gcms_data_preprocessing.py`: the script loads a feature table and a metadata table, checks consistency, splits samples by temperature (Hot and Cold), filters and cleans feature and autoscale the data. In addition, it creates CSV files formatted for MetaboAnalyst. 
 
 - `02_sensory_data_preprocessing.py`: the script loads a sensory table and a metadata table [TODO]
 
 ### Notebooks: 
-- `01_sensory.ipynb`: 
+- `01_sensory.ipynb`:
 
-- `02_volatilome_stats.ipynb`:
-
-## I/O files
+- `02_volatilome_stats.ipynb`: Performs multivariate analysis (PCA) on volatile profiles of hot and cold infusions. Validates group separation and variance homogeneity using PERMANOVA and PERMDISP. Generates hierarchical-clustering heatmaps (Ward method) to visualize metabolite abundance patterns and sample correlations.
