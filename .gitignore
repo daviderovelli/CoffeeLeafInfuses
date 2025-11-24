@@ -4,9 +4,6 @@ data/output/
 results/
 scripts/outputs/sPLS-DA/
 notebook/outputs/
-
-#ignore all .DS_Store
-.DS_Store
 scripts/old_sPLS-DA.R
 scripts/sPLS-DA.R
 scripts/test.R
@@ -16,3 +13,7 @@ scripts/sPLS-DA.R
 scripts/.RData
 scripts/Radar chart.R
 scripts/.Rhistory
+
+#ignore all .DS_Store
+.DS_Store
+
