@@ -1,7 +1,6 @@
 #ignore entire data folder
 data/input/rawdata/
-data/output/archived/
-data/output/others/
+data/output/
 results/
 scripts/outputs/sPLS-DA/
 notebook/outputs/
