@@ -50,9 +50,9 @@ The `paneldata_infuses_full.csv` contains the data collected during the sensory 
 
 - `01_gcms_data_preprocessing.py`: the script loads a feature table and a metadata table, checks consistency, splits samples by temperature (Hot and Cold), filters and cleans feature and autoscale the data. In addition, it creates CSV files formatted for MetaboAnalyst. 
 
-- `02_sensory_data_preprocessing.py`: the script loads a sensory table and a metadata table [TODO]
+- `02_sensory_data_preprocessing.py`: the script loads a sensory table and a metadata table. It transforms scores from a 0–5 scale to a 1–6 scale and separates samples into hot and cold groups.The processed subsets are then saved as individual CSV files for downstream analysis.
 
 ### Notebooks: 
-- `01_sensory.ipynb`:
+- `01_sensory.ipynb`: performs multivariate analysis of processed sensory data, including PCA and MCA. It loads hot and cold sensory datasets, explores variance structures, and visualizes sample relationships. Custom plotting functions generate score plots and radar charts for clear comparative interpretation on the selected samples. 
 
-- `02_volatilome_stats.ipynb`: Performs multivariate analysis (PCA) on volatile profiles of hot and cold infusions. Validates group separation and variance homogeneity using PERMANOVA and PERMDISP. Generates hierarchical-clustering heatmaps (Ward method) to visualize metabolite abundance patterns and sample correlations.
+- `02_volatilome_stats.ipynb`: performs multivariate analysis (PCA) on volatile profiles of hot and cold infusions. Validates group separation and variance homogeneity using PERMANOVA and PERMDISP. It generates hierarchical-clustering heatmaps to visualize metabolite abundance patterns and sample correlations. An in-depth analysis for the keyodorants compounds is also provided. 
