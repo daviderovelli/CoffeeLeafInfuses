@@ -1,27 +1,28 @@
 # Use this file to create an environment using:
 # conda env create -f requirements.yaml
 
+# Use this file to create an environment using:
+# conda env create -f requirements.yaml
+
 name: coffeeleafinfuses
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python=3.11.0
+  - jupyter
+  - notebook
+  - pandas
+  - omegaconf
+  - jupyter_server
   - numpy
-  - pandas=2.2.3
-  - scipy=1.11.4
-  - openpyxl<4.0.0
-  - matplotlib=3.7.1
-  - seaborn=0.12.2
-  - scikit-learn=1.4.2  # Covers 'sklearn'
-  - scikit-bio=0.6.0    # Covers 'skbio' (Updated to ensure Py3.11 compatibility)
-  - statsmodels=0.14.1
-  - biopython=1.81
-  - omegaconf=2.3.0
-  - tenacity=9.0.0
-  - pyyaml=6.0.2
-  - pybliometrics=4.1
-  - requests=2.31.0
-  - networkx=3.2.1
-  - sklearn-pandas=2.2.0 
-  - mca=1.0.4 
+  - scipy
+  - scikit-learn
+  - scikit-bio
+  - matplotlib
+  - seaborn
+  - requests
+  - pip
+  - pip:
+    - mca
+    - pyyaml

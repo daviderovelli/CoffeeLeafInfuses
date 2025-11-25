@@ -1,7 +1,6 @@
 import pandas as pd
 import yaml
 from pathlib import Path
-import requests
 
 ########## Load config.yaml ##########
 def load_config(path: str, filepaths: bool=True, **kwargs):
