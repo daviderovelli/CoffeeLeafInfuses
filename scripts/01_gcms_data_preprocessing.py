@@ -10,7 +10,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 from src.utils import load_config # noqa: E402
 
-#load config file
+#=== Load config file =================================================
 config = load_config(path='config/config.yaml', section='gc-ms')
 
 FEATURES = Path(config['ftable'])
@@ -31,14 +31,14 @@ meta_raw = pd.read_csv(METADATA, sep='\t')
 print(f"Metadata loaded: {meta_raw.shape[0]} entries")
 
 
-# === Extract Key Odorant Compounds 
+# === Extract Key Odorant Compounds ===============================
 ko_col = 'Key Odorant'
 name_col = 'Compound'
 
 valid_samples = [c for c in feat_df.columns if c in meta_raw[sample_col].values]
 
 if ko_col in feat_df.columns:
-    print(f"\n--- KEY ODORANT EXTRACTION ---")
+    print("\n--- KEY ODORANT EXTRACTION ---")
     
     # 1. Filtra le righe con 'X'
     is_ko = feat_df[ko_col].astype(str).str.strip().str.upper() == 'X'
@@ -53,23 +53,18 @@ if ko_col in feat_df.columns:
         ko_clean = ko_subset[valid_samples]
         ko_export = ko_clean.T
         ko_export.index.name = 'Samples'
-        output_ko_file = 'keyodorants_extracted.csv'
-        ko_export.to_csv(output_ko_file)
-        print(f" Extracted data saved to: {output_ko_file}")
+        ko_export.to_csv(config['key_odorants'])
+        print(f" Extracted data saved to: {config['key_odorants']}")
         print(f" Format: {ko_export.shape[0]} samples (rows) x {ko_export.shape[1]} molecules (columns)")
     else:
-        print(f" No compounds marked with 'X' found.")
+        print(" No compounds marked with 'X' found.")
 
-    # 7. PULIZIA MAIN DATASET per le analisi successive
-    # Manteniamo nel feat_df solo le colonne numeriche dei campioni
-    # Rimuovendo colonne di testo come 'Key Odorant', 'Compound', 'RT' che causano errori
-    print(f"\nCleaning feature table for processing...")
+    print("\nCleaning feature table for processing...")
     feat_df = feat_df[valid_samples]
     print(f" Feature table cleaned: {feat_df.shape[0]} metabolites × {feat_df.shape[1]} samples")
 
 else:
     print(f"\n WARNING: Column '{ko_col}' not found. Skipping extraction.")
-    # Fallback pulizia: teniamo comunque solo i campioni validi
     feat_df = feat_df[valid_samples]
 
 meta_raw = pd.read_csv(METADATA, sep='\t')
@@ -272,7 +267,6 @@ print(f"   Sample names: {list(cold_scaled.index[:5])}... (showing first 5)")
 print(f"   Metabolite names: {list(cold_scaled.columns[:5])}... (showing first 5)")
 
 # === Save preprocessed data ========================================
-
 hot_scaled.to_csv(config['ftable_hot'])
 cold_scaled.to_csv(config['ftable_cold'])
 print("File saved as feature_table_hot.csv and feature_table_cold.csv")
@@ -282,27 +276,14 @@ def export_for_metaboanalyst(df: pd.DataFrame, groups: pd.Series, output_path: s
     """
     Export DataFrame for MetaboAnalyst 
     """
-    # Create a copy to avoid modifying the original dataframe
     ma_df = df.copy()
-    
-    # Map the groups using the Sample ID (index)
-    # We insert it at position 0 (first column)
     ma_df.insert(0, 'Class', ma_df.index.map(groups))
-    
-    # Give the index a name (MetaboAnalyst prefers 'Sample' or empty)
     ma_df.index.name = 'Sample'
-    
-    # Check for missing labels
     if ma_df['Class'].isna().any():
         n_missing = ma_df['Class'].isna().sum()
         print(f"WARNING: {n_missing} samples in {output_path} are missing a Group label!")
-    
-    # Save
     ma_df.to_csv(output_path)
     print(f" > Saved: {output_path} ({ma_df.shape[0]} samples x {ma_df.shape[1]} cols)")
-    
-    # Preview format
-    print(f"   Format preview:\n{ma_df.iloc[:2, :3].to_string()}\n")
 
 # Export HOT dataset
 export_for_metaboanalyst(
