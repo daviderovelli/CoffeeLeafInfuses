@@ -30,6 +30,51 @@ print(f"\n Feature table loaded: {feat_df.shape[0]} metabolites × {feat_df.shap
 meta_raw = pd.read_csv(METADATA, sep='\t')
 print(f"Metadata loaded: {meta_raw.shape[0]} entries")
 
+
+# === Extract Key Odorant Compounds 
+ko_col = 'Key Odorant'
+name_col = 'Compound'
+
+valid_samples = [c for c in feat_df.columns if c in meta_raw[sample_col].values]
+
+if ko_col in feat_df.columns:
+    print(f"\n--- KEY ODORANT EXTRACTION ---")
+    
+    # 1. Filtra le righe con 'X'
+    is_ko = feat_df[ko_col].astype(str).str.strip().str.upper() == 'X'
+    
+    if is_ko.sum() > 0:
+        print(f" Found {is_ko.sum()} Key Odorant compounds.")
+        
+        ko_subset = feat_df.loc[is_ko].copy()
+        if name_col in ko_subset.columns:
+            ko_subset = ko_subset.set_index(name_col)
+            print(f" Using '{name_col}' column as molecule names.")
+        ko_clean = ko_subset[valid_samples]
+        ko_export = ko_clean.T
+        ko_export.index.name = 'Samples'
+        output_ko_file = 'keyodorants_extracted.csv'
+        ko_export.to_csv(output_ko_file)
+        print(f" Extracted data saved to: {output_ko_file}")
+        print(f" Format: {ko_export.shape[0]} samples (rows) x {ko_export.shape[1]} molecules (columns)")
+    else:
+        print(f" No compounds marked with 'X' found.")
+
+    # 7. PULIZIA MAIN DATASET per le analisi successive
+    # Manteniamo nel feat_df solo le colonne numeriche dei campioni
+    # Rimuovendo colonne di testo come 'Key Odorant', 'Compound', 'RT' che causano errori
+    print(f"\nCleaning feature table for processing...")
+    feat_df = feat_df[valid_samples]
+    print(f" Feature table cleaned: {feat_df.shape[0]} metabolites × {feat_df.shape[1]} samples")
+
+else:
+    print(f"\n WARNING: Column '{ko_col}' not found. Skipping extraction.")
+    # Fallback pulizia: teniamo comunque solo i campioni validi
+    feat_df = feat_df[valid_samples]
+
+meta_raw = pd.read_csv(METADATA, sep='\t')
+print(f"Metadata loaded: {meta_raw.shape[0]} entries")
+
 # === Verify metadata-features matching =======================================
 print("METADATA-FEATURES CONSISTENCY CHECK")
 
