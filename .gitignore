@@ -1,8 +1,8 @@
 #ignore entire data folder
 data/input/rawdata/
-data/input/input_feature_table.csv/
-data/input/paneldata_infuses_full.csv/
-data/input/volatile_infuses_metadata.tsv/
+data/input/input_feature_table.csv
+data/input/paneldata_infuses_full.csv
+data/input/volatile_infuses_metadata.tsv
 data/output/
 results/
 notebook/archived/
