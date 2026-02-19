@@ -1,4 +1,4 @@
-# Sensomic profiling of coffee leaf infuses: unlocking the potential of a novel food
+# Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment
 
 This repository contains all the scripts needed to reproduce the data analysis and results of the manuscript "Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment" (DOI here). 
 
