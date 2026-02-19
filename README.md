@@ -1,8 +1,13 @@
 # Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment
 
-This repository contains all the scripts needed to reproduce the data analysis and results of the manuscript "Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment" (DOI here). 
+This repository contains the scripts required to reproduce the data analysis and results of the manuscript: **Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment ([DOI Link])**
 
-In this repository mock datasets are provided. The original .csv files are aviabile throught Zenodo under resticted visibility [link]. 
+**Data Availability and Confidentiality** 
+
+Due to **confidentiality agreements regarding proprietary corporate data**, the original datasets cannot be made publicly available in this repository.
+
+- **Original data**: The full CSV files are deposited on Zenodo under restricted access. Researchers wishing to access the data for validation purposes may request it via [Zenodo Link], subject to approval.
+- **Mock data**: We have provided synthetic "mock" datasets within this repository. These files mimic the structure and format of the original data, allowing users to test the pipeline and verify the functionality of the scripts.
 
 ## Requirements
 
