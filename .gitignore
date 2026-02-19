@@ -1,18 +1,13 @@
 #ignore entire data folder
 data/input/rawdata/
+data/input/input_feature_table.csv
+data/input/paneldata_infuses_full.csv
+data/input/volatile_infuses_metadata.tsv
 data/output/
 results/
-scripts/outputs/sPLS-DA/
-notebook/outputs/
-scripts/old_sPLS-DA.R
-scripts/sPLS-DA.R
-scripts/test.R
-notebook/03_random.ipynb
-notebook/99_trash.ipynb
-scripts/sPLS-DA.R
-scripts/.RData
-scripts/Radar chart.R
-scripts/.Rhistory
+notebook/archived/
+scripts/archived/
+data/other/
 
 #ignore all .DS_Store
 .DS_Store

@@ -1,6 +1,8 @@
 # Sensomic profiling of coffee leaf infuses: unlocking the potential of a novel food
 
-This repository contains all the scripts needed to reproduce the data analysis and results of the manuscript "Sensomic profiling of coffee leaf infuses: unlocking the potential of a novel food" (DOI here).
+This repository contains all the scripts needed to reproduce the data analysis and results of the manuscript "Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment" (DOI here). 
+
+In this repository mock datasets are provided. The original .csv files are aviabile throught Zenodo under resticted visibility [link]. 
 
 ## Requirements
 
