@@ -1,16 +1,15 @@
-#input/output file paths
+# input/output file paths for mock data
 gc-ms: 
-  metadata: data/input/volatile_infuses_metadata.tsv
-  ftable_input: data/input/input_feature_table.csv
-  ftable: data/output/feature_table.csv
-  ftable_hot: data/output/feature_table_hot.csv #scaled data
-  ftable_cold: data/output/feature_table_cold.csv #scaled data
-  ma_ftable_hot: data/output/ma_feature_table_hot.csv #scaled data and format for MetaboAnalyst
-  ma_ftable_cold: data/output/ma_feature_table_cold.csv #scaled data and format for MetaboAnalyst
-  key_odorants: data/output/keyodorants_extracted.csv
+  metadata: data/input/mock/mock_volatile_infuses_metadata.tsv
+  ftable_input: data/input/mock/mock_input_feature_table.csv
+  ftable: data/output/mock/mock_feature_table.csv
+  ftable_hot: data/output/mock/mock_feature_table_hot.csv #scaled data
+  ftable_cold: data/output/mock/mock_feature_table_cold.csv #scaled data
+  ma_ftable_hot: data/output/mock/mock_ma_feature_table_hot.csv #scaled data and format for MetaboAnalyst
+  ma_ftable_cold: data/output/mock/mock_ma_feature_table_cold.csv #scaled data and format for MetaboAnalyst
+  key_odorants: data/output/mock/mock_keyodorants_extracted.csv
 
 sensory:
-  sensory_table_input: data/input/paneldata_infuses_full.csv
-  stable_hot: data/output/sensory_table_hot.csv
-  stable_cold: data/output/sensory_table_cold.csv
-  
+  sensory_table_input: data/input/mock/mock_paneldata_infuses_full.csv
+  stable_hot: data/output/mock/mock_sensory_table_hot.csv
+  stable_cold: data/output/mock/mock_sensory_table_cold.csv

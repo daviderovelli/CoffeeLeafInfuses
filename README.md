@@ -36,9 +36,9 @@ This script checks if the environment already exists, creates it if needed, inst
 
 - The `data` folder contains two subfolders: 
 
-    - `input`: contains the input tables from the sensory assessment (`paneldata_infuses_full.csv`) and the volatile feature table (`input_feature_table.csv`).
+    - `input/mock`: contains the input tables from the sensory assessment (`paneldata_infuses_full.csv`) and the volatile feature table (`input_feature_table.csv`).
 
-    - `ouput`: contains the outupts generated from the python scripts (see [Usage/Scipts](#scripts)) used as prerequisite for the whole analysis carried outusing the Jupiter Notebooks (see [Usage/Notebooks](#notebooks))
+    - `ouput/mock`: contains the outupts generated from the python scripts (see [Usage/Scipts](#scripts)) used as prerequisite for the whole analysis carried outusing the Jupiter Notebooks (see [Usage/Notebooks](#notebooks)).
 
 - The `scripts` and `notebooks` folders contain Python scripts and Jupyter Notebooks to reproduce and run the data analysis (see [Usage](#usage)).
 

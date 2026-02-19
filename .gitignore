@@ -3,11 +3,20 @@ data/input/rawdata/
 data/input/input_feature_table.csv
 data/input/paneldata_infuses_full.csv
 data/input/volatile_infuses_metadata.tsv
-data/output/
-results/
+data/output/archived
+data/output/others
+data/output/feature_table_cold.csv
+data/output/feature_table_hot.csv
+data/output/feature_table.csv
+data/output/keyodorants_extracted.csv
+data/output/ma_feature_table_cold.csv
+data/output/ma_feature_table_hot.csv
+data/output/sensory_table_cold.csv
+data/output/sensory_table_hot.csv
 notebook/archived/
 scripts/archived/
 data/other/
+results/
 
 #ignore all .DS_Store
 .DS_Store
