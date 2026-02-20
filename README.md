@@ -4,7 +4,7 @@
 
 This repository contains the scripts required to reproduce the data analysis and results of the manuscript: **Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment ([DOI Link])**
 
-**Data Availability and Confidentiality** 
+## Data Availability and Confidentiality
 
 Due to **confidentiality agreements regarding proprietary corporate data**, the original datasets cannot be made publicly available in this repository.
 
