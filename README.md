@@ -6,7 +6,7 @@ This repository contains the scripts required to reproduce the data analysis and
 
 Due to **confidentiality agreements regarding proprietary corporate data**, the original datasets cannot be made publicly available in this repository.
 
-- **Original data**: The full CSV files are deposited on Zenodo under restricted access. Researchers wishing to access the data for validation purposes may request it via [Zenodo Link], subject to approval.
+- **Original data**: The full CSV files are deposited on Zenodo under restricted access. Researchers wishing to access the data for validation purposes may request it via [[Zenodo Link]](https://doi.org/10.5281/zenodo.18266459), subject to approval.
 - **Mock data**: We have provided synthetic `mock` datasets within this repository. These files mimic the structure and format of the original data, allowing users to test the pipeline and verify the functionality of the scripts.
 
 ## Requirements
