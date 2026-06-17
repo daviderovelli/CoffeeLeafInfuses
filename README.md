@@ -3,7 +3,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18266459.svg)](https://doi.org/10.5281/zenodo.18266459)
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 
-This repository contains the scripts required to reproduce the data analysis and results of the manuscript: **Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment ([https://doi.org/10.2139/ssrn.6951845])**
+This repository contains the scripts required to reproduce the data analysis and results of the manuscript: **Sensomic profiling of coffee leaf infusions: chemical–sensory markers for quality assessment (https://doi.org/10.2139/ssrn.6951845)**
 
 ## Data Availability and Confidentiality
 
